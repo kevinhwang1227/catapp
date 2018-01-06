@@ -2,16 +2,23 @@ package com.example.user.catmap;
 
 import android.Manifest;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,14 +28,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMyLocationClickListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
-    static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     static final LatLng KAIST = new LatLng(36.3702793,127.3627346);
     private boolean mPermissionDenied = false;
     private GoogleMap mMap;
-    private double lat;
-    private double lng;
+    private LatLng mLocation;
+
 
 
     @Override
@@ -37,13 +46,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         MapFragment map = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         map.getMapAsync(this);
+        FloatingActionButton takePhoto = (FloatingActionButton) findViewById(R.id.fabAdd);
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.floatingMenu);
 
+        takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fabMenu.close(true);
+
+                Intent intent = new Intent(MainActivity.this, AddCat.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+            case Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -63,15 +83,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMyLocationClickListener(this);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(KAIST));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
-
         enableMyLocation();
+
     }
 
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
-            PermissionUtils.requestPermission(this, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION,
+            PermissionUtils.requestPermission(this, Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION, true);
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
@@ -96,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMyLocationButtonClick() {
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+        GPSTracker gps = new GPSTracker(this);
+        mLocation = new LatLng(gps.getLatitude(),gps.getLongitude());
+        String message = String.format("Current location: Latitude: %1$s Longitude: %2$s\n", mLocation.latitude, mLocation.longitude);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -105,19 +129,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    public void onLocationChanged(Location loc) {
-        String message = String.format(
-                "New Location \n Longitude: %1$s \n Latitude: %2$s",
-                loc.getLongitude(), loc.getLatitude()
-        );
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-    public void onProviderDisabled(String arg0) {
 
-    }
-    public void onProviderEnabled(String provider) {
 
-    }
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
 }
