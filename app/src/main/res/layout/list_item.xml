@@ -21,8 +21,11 @@
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:fontFamily="sans-serif-smallcaps"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif"
+                android:paddingTop="20dp"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
                 android:textSize="22sp" />
         </FrameLayout>
 

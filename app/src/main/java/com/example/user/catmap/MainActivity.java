@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         MapFragment map = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         map.getMapAsync(this);
         FloatingActionButton takePhoto = (FloatingActionButton) findViewById(R.id.fabAdd);
+        FloatingActionButton gotoList = (FloatingActionButton) findViewById(R.id.fabList);
         final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.floatingMenu);
 
         takePhoto.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +56,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 fabMenu.close(true);
 
                 Intent intent = new Intent(MainActivity.this, AddCat.class);
+                startActivity(intent);
+            }
+        });
+
+
+        gotoList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fabMenu.close(true);
+
+                Intent intent = new Intent(MainActivity.this, ListCat.class);
                 startActivity(intent);
             }
         });
@@ -115,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         GPSTracker gps = new GPSTracker(this);
         mLocation = new LatLng(gps.getLatitude(),gps.getLongitude());
         String message = String.format("Current location: Latitude: %1$s Longitude: %2$s\n", mLocation.latitude, mLocation.longitude);

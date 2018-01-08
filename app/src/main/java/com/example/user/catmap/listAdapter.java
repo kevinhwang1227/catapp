@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ public class listAdapter extends BaseAdapter{
     private HashMap<String, Bitmap> imageList;
     private ArrayList<HashMap<String, String>> catList;
     private ViewHolder viewHolder;
+    private ArrayList<HashMap<String,String>> orig;
 
     class ViewHolder {
         ImageView imageView;
@@ -77,9 +80,9 @@ public class listAdapter extends BaseAdapter{
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-
         int size = catList.size();
         final HashMap<String,String> elem = catList.get(i);
+        /*
         try {
             if (imageList.containsKey(elem.get("name"))) {
                 viewHolder.imageView.setImageBitmap(imageList.get(elem.get("name")));
@@ -111,9 +114,14 @@ public class listAdapter extends BaseAdapter{
             viewHolder.imageView.setImageResource(android.R.drawable.ic_menu_report_image);
             e.printStackTrace();
         }
-
-        viewHolder.textView.setText(elem.get("name"));
+*/
+        viewHolder.textView.setText("  "+ elem.get("name"));
+        viewHolder.imageView.setImageBitmap(imageList.get(elem.get("name")));
 
         return view;
     }
+
+
+
+
 }

@@ -3,6 +3,7 @@ package com.example.user.catmap;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -19,13 +20,21 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class AddCat extends AppCompatActivity {
     ImageView mImageView;
@@ -38,6 +47,56 @@ public class AddCat extends AppCompatActivity {
         setContentView(R.layout.activity_add_cat);
         mImageView = (ImageView) findViewById(R.id.imageView);
         goToPhotos();
+        ListView listView = (ListView) findViewById(R.id.listView);
+
+
+        final ArrayList<HashMap<String,String>> catlist = new ArrayList<>();
+        final HashMap<String,Bitmap> catimg = new HashMap<>();
+        HashMap<String,String> a = new HashMap<String,String>();
+        HashMap<String,String> b = new HashMap<String,String>();
+        HashMap<String,String> c = new HashMap<String,String>();
+        a.put("name","야옹이");
+        b.put("name","옹옹이");
+        c.put("name","캣니스");
+        catlist.add(a);
+        catlist.add(b);
+        catlist.add(c);
+        Bitmap abit = BitmapFactory.decodeResource(getResources(),R.drawable.cat1);
+        Bitmap bbit = BitmapFactory.decodeResource(getResources(),R.drawable.cat2);
+        Bitmap cbit = BitmapFactory.decodeResource(getResources(),R.drawable.cat3);
+        catimg.put("야옹이",abit);
+        catimg.put("옹옹이",bbit);
+        catimg.put("캣니스",cbit);
+
+        listAdapter mlistAdapter = new listAdapter(catimg,catlist);
+
+        listView.setAdapter(mlistAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = catlist.get(i).get("name");
+                //String info = catlist.get(i).get("info");
+                Bitmap img = catimg.get(name);
+                ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+                img.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+                FileOutputStream fo = null;
+                try {
+                    fo = openFileOutput("cat", Context.MODE_PRIVATE);
+                    fo.write(bStream.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(AddCat.this, catInfo.class);
+                intent.putExtra("name", name);
+                //intent.putExtra("info",info);
+                //intent.putExtra("img", byteArray);
+                intent.putExtra("from","AddCat");
+                startActivity(intent);
+            }
+        });
+
+
     }
 
     private void goToPhotos() {
@@ -54,7 +113,6 @@ public class AddCat extends AppCompatActivity {
             dispatchTakePictureIntent();
         }
     }
-
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

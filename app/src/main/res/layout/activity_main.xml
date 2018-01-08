@@ -34,6 +34,15 @@
             app:fab_label="Take Photo"
             app:fab_size="mini" />
 
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            app:backgroundTint="@color/colorPrimary"
+            app:fab_label="Cat List"
+            app:fab_size="mini" />
+
 
     </com.github.clans.fab.FloatingActionMenu>
 
