@@ -55,18 +55,18 @@ public class AddCat extends AppCompatActivity {
         HashMap<String,String> a = new HashMap<String,String>();
         HashMap<String,String> b = new HashMap<String,String>();
         HashMap<String,String> c = new HashMap<String,String>();
-        a.put("name","야옹이");
-        b.put("name","옹옹이");
-        c.put("name","캣니스");
+        a.put("name","냥냥이");
+        b.put("name","냐옹이");
+        c.put("name","야옹이");
         catlist.add(a);
         catlist.add(b);
         catlist.add(c);
         Bitmap abit = BitmapFactory.decodeResource(getResources(),R.drawable.cat1);
         Bitmap bbit = BitmapFactory.decodeResource(getResources(),R.drawable.cat2);
         Bitmap cbit = BitmapFactory.decodeResource(getResources(),R.drawable.cat3);
-        catimg.put("야옹이",abit);
-        catimg.put("옹옹이",bbit);
-        catimg.put("캣니스",cbit);
+        catimg.put("냥냥이",abit);
+        catimg.put("냐옹이",bbit);
+        catimg.put("야옹이",cbit);
 
         listAdapter mlistAdapter = new listAdapter(catimg,catlist);
 

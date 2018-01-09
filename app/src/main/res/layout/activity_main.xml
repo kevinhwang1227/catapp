@@ -25,14 +25,6 @@
         app:menu_labels_ellipsize="end"
         app:menu_labels_singleLine="true">
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_camera"
-            app:backgroundTint="@color/colorPrimary"
-            app:fab_label="Take Photo"
-            app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabList"
@@ -42,6 +34,34 @@
             app:backgroundTint="@color/colorPrimary"
             app:fab_label="Cat List"
             app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabDiary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_dialog_map"
+            app:backgroundTint="@color/colorPrimary"
+            app:fab_label="Add Mark/Log"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_gallery"
+            app:backgroundTint="@color/colorPrimary"
+            app:fab_label="Gallery"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_camera"
+            app:backgroundTint="#ffffff"
+            app:fab_label="Take Photo"
+            app:fab_size="normal" />
+
 
 
     </com.github.clans.fab.FloatingActionMenu>

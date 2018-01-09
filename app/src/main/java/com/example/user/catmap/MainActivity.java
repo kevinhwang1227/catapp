@@ -1,5 +1,6 @@
 package com.example.user.catmap;
 
+import android.support.v4.app.Fragment;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private LatLng mLocation;
 
+    int PERMISSION_CODE = 100;
+
 
 
     @Override
@@ -47,8 +50,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         MapFragment map = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         map.getMapAsync(this);
         FloatingActionButton takePhoto = (FloatingActionButton) findViewById(R.id.fabAdd);
-        FloatingActionButton gotoList = (FloatingActionButton) findViewById(R.id.fabList);
+        FloatingActionButton goToCatList = (FloatingActionButton) findViewById(R.id.fabList);
+        FloatingActionButton goToGallery = (FloatingActionButton) findViewById(R.id.fabGallery);
         final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.floatingMenu);
+
+        goToGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                fabMenu.close(true);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_CODE);
+            } else {
+                fabMenu.close(true);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryIntent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, PERMISSION_CODE);
+            }
+            }
+        });
 
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
 
-        gotoList.setOnClickListener(new View.OnClickListener() {
+        goToCatList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fabMenu.close(true);
@@ -139,7 +160,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String message = String.format("Current location: Latitude: %1$s Longitude: %2$s\n", location.getLatitude(), location.getLongitude());
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
-
-
-
 }
