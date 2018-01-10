@@ -52,24 +52,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         FloatingActionButton takePhoto = (FloatingActionButton) findViewById(R.id.fabAdd);
         FloatingActionButton goToCatList = (FloatingActionButton) findViewById(R.id.fabList);
         FloatingActionButton goToGallery = (FloatingActionButton) findViewById(R.id.fabGallery);
+        FloatingActionButton goToDiary = (FloatingActionButton) findViewById(R.id.fabDiary);
         final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.floatingMenu);
-
-        goToGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                fabMenu.close(true);
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_CODE);
-            } else {
-                fabMenu.close(true);
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                galleryIntent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
-                galleryIntent.setType("image/*");
-                startActivityForResult(galleryIntent, PERMISSION_CODE);
-            }
-            }
-        });
 
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +72,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 fabMenu.close(true);
 
                 Intent intent = new Intent(MainActivity.this, ListCat.class);
+                startActivity(intent);
+            }
+        });
+
+        goToGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    fabMenu.close(true);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_CODE);
+                } else {
+                    fabMenu.close(true);
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    galleryIntent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+                    galleryIntent.setType("image/*");
+                    startActivityForResult(galleryIntent, PERMISSION_CODE);
+                }
+            }
+        });
+
+        goToDiary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fabMenu.close(true);
+
+                Intent intent = new Intent(MainActivity.this, Diary.class);
                 startActivity(intent);
             }
         });

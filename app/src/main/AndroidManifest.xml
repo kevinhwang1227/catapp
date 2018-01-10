@@ -43,7 +43,8 @@
             android:name=".AddCat"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".ListCat" />
-        <activity android:name=".catInfo"></activity>
+        <activity android:name=".catInfo" />
+        <activity android:name=".Diary" />
     </application>
 
 </manifest>
